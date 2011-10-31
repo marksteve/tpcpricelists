@@ -119,10 +119,9 @@ class MainHandler(webapp.RequestHandler):
         # Prepare pdf values
         item_count = len(item_list)
         page_count = int(math.ceil(float(item_count) / ITEM_PER_PAGE))
-        h_style = TableStyle([('FONT', (0, 0), (-1, -1), 'Helvetica', 8),
+        h_style = TableStyle([('FONT', (0, 0), (-1, -1), 'Helvetica', 10),
                               ('TOPPADDING', (0, 0), (-1, -1), 0),
-                              ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
-                              ('INNERGRID', (0, 0), (-1, -1), 0.25, HexColor(0x333333)),
+                              ('RIGHTPADDING', (0, 0), (-1, -1), 20),
                               ])
         f_style = ParagraphStyle('f_style', fontName='Helvetica', fontSize=6,
                                  spaceBefore=2, leading=8, alignment=TA_CENTER)
@@ -139,6 +138,7 @@ class MainHandler(webapp.RequestHandler):
                     'Location: ' + location,
                     'Contact Number: ' + contact_no,
                     ]], style=h_style)
+        h.hAlign = 'LEFT'
         for i in range(0, page_count):
           t = Table(item_list[i*ITEM_PER_PAGE:(i+1)*ITEM_PER_PAGE],
                     colWidths=(6*inch, 2*inch), style=table_style)

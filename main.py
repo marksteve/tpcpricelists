@@ -10,6 +10,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp import util
 from google.appengine.runtime import DeadlineExceededError
+from reportlab.lib.colors import HexColor
 from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER, TA_JUSTIFY
 from reportlab.lib.pagesizes import LETTER
 from reportlab.lib.styles import ParagraphStyle
@@ -124,6 +125,7 @@ class MainHandler(webapp.RequestHandler):
         table_style = TableStyle([('FONT', (0, 0), (-1, -1), 'Helvetica', 8),
                                   ('TOPPADDING', (0, 0), (-1, -1), 0),
                                   ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+                                  ('ROWBACKGROUNDS', (0, 0), (-1, -1), [None, HexColor(0xCCCCCC)]),
                                   ])
 
         # Render pdf

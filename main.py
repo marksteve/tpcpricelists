@@ -94,9 +94,14 @@ class MainHandler(webapp.RequestHandler):
         pdf = StringIO()
 
         # Parse html
-        soup = BeautifulSoup(
-          requests.get('http://www.tipidpc.com/useritems.php?username=' + username).content
-        )
+        try:
+          soup = BeautifulSoup(
+            requests.get('http://www.tipidpc.com/useritems.php?username=' + username).content
+          )
+        except:
+          self.response.set_status(500)
+          self.response.out.write("Can't connect to TPC at the moment. Please try again later.")
+          return
         try:
           location, contact_no = soup.find('p', 'usermeta').findAll('em', 'red')
           location = location.string

@@ -67,7 +67,8 @@ body, input {
 }
 
 a {
-  color: #666;
+  color: #97cb05;
+  text-decoration: none;
 }
 
 h1 {
@@ -76,8 +77,11 @@ h1 {
   margin-bottom: 14px;
 }
 h1 > a {
-  color: #000;
-  text-decoration: none;
+  background: url('/static/logo.png') no-repeat;
+  display: inline-block;
+  width: 300px;
+  height: 64px;
+  text-indent: -10000px;
 }
 
 p, form {

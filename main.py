@@ -119,9 +119,11 @@ class MainHandler(webapp.RequestHandler):
         # Prepare pdf values
         item_count = len(item_list)
         page_count = int(math.ceil(float(item_count) / ITEM_PER_PAGE))
-        h_style = TableStyle([('FONT', (0, 0), (-1, -1), 'Helvetica', 10),
+        h_style = TableStyle([('FONT', (0, 0), (0, 0), 'Helvetica', 10),
+                              ('FONT', (1, 0), (-1, 0), 'Helvetica', 6),
+                              ('ALIGN', (1, 0), (-1, 0), 'RIGHT'),
+                              ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
                               ('TOPPADDING', (0, 0), (-1, -1), 0),
-                              ('RIGHTPADDING', (0, 0), (-1, -1), 20),
                               ])
         f_style = ParagraphStyle('f_style', fontName='Helvetica', fontSize=6,
                                  spaceBefore=2, leading=8, alignment=TA_CENTER)
@@ -135,9 +137,10 @@ class MainHandler(webapp.RequestHandler):
         c = canvas.Canvas(pdf, pagesize=LETTER)
         c.setAuthor(username)
         h = Table([[username + ' Pricelist (' + today + ')',
-                    'Location: ' + location,
+                    'Location: ' + location + '\n' +
                     'Contact Number: ' + contact_no,
-                    ]], style=h_style)
+                    ]],
+                  colWidths=(4*inch, 4*inch), style=h_style)
         h.hAlign = 'LEFT'
         for i in range(0, page_count):
           t = Table(item_list[i*ITEM_PER_PAGE:(i+1)*ITEM_PER_PAGE],

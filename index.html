@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TipidPC Pricelists</title>
+    <meta
+      name="description"
+      content="Generate printable pricelists from TipidPC items for sale lists"
+    >
+    <meta name="keywords" content="{% if username %}{{ username }}, {% endif %}tipidpc, tpc, pricelist, pdf, items for sale">
+    <link href="/static/styles.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script>
+      // https://github.com/polarblau/suggest
+      (function(b){b.fn.suggest=function(f,g){var e=b.extend({suggestionColor:"#ccc",moreIndicatorClass:"suggest-more"},g);return this.each(function(){$this=b(this);var c=b("<div/>",{css:{position:"absolute",height:$this.height(),width:$this.width(),top:$this.css("borderTopWidth"),left:$this.css("borderLeftWidth"),padding:$this.cssShortForAllSides("padding"),margin:$this.cssShortForAllSides("margin"),fontFamily:$this.css("fontFamily"),fontSize:$this.css("fontSize"),fontStyle:$this.css("fontStyle"),lineHeight:$this.css("lineHeight"),
+      fontWeight:$this.css("fontWeight"),letterSpacing:$this.css("letterSpacing"),backgroundColor:$this.css("backgroundColor"),color:e.suggestionColor}}),i=b("<span/>",{css:{position:"absolute",top:c.height()+parseInt($this.css("fontSize"),10)/2,left:c.width(),display:"block",fontSize:$this.css("fontSize"),fontFamily:$this.css("fontFamily"),color:e.suggestionColor},"class":e.moreIndicatorClass}).html("&hellip;").hide();$this.attr({autocomplete:"off",spellcheck:"false",dir:"ltr"}).css({background:"transparent"}).wrap(b("<div/>",
+      {css:{position:"relative",paddingBottom:"1em"}})).bind("keydown.suggest",function(a){var d=a.keyCode?a.keyCode:a.which;if(d==9&&!a.altKey)a.preventDefault();else if(d==13)c.is(":empty")||a.preventDefault();else if(d==38||d==40)if(a.preventDefault(),a=b(this).data("suggestions"),a.all.length>1)d==40&&a.index<a.all.length-1?a.suggest.html(a.all[++a.index]):d==38&&a.index>0&&a.suggest.html(a.all[--a.index]),b(this).data("suggestions").index=a.index}).bind("keyup.suggest",function(a){var d=a.keyCode?
+      a.keyCode:a.which;if(d==38||d==40)return false;i.hide();var e=b(this).val(),g=e.replace(" ","&nbsp;");if((d==9||d==13)&&c.text().length>0)return a.preventDefault(),a=b(this).data("suggestions"),b(this).val(a.terms[a.index]),c.empty(),false;c.empty();if(!b.trim(e).length)return false;for(var d=RegExp("^"+e.replace(/[-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,"\\$&"),"i"),a=[],j=[],h=0;h<f.length;h++)d.test(f[h])&&(j.push(f[h]),a.push(g+f[h].slice(e.length)));a.length>0&&(a[0]!==e&&c.html(a[0]),b(this).data("suggestions",
+      {all:a,terms:j,index:0,suggest:c}),a.length>1&&i.show())}).bind("blur.suggest",function(){c.empty()});c.insertAfter($this);i.insertAfter(c)})};b.fn.cssShortForAllSides=function(f){var g=b(this),e=[],c=b.map(["Top","Right","Bottom","Left"],function(b){return f+b});b.each(c,function(b,a){e.push(g.css(a)||"0")});return e.join(" ")}})(jQuery);
+      (function($){
+        $(document).ready(function() {
+          $('#username').suggest({{ usernames }});
+        });
+      })(jQuery);
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-16858406-3']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="wrapper">
+      <h1><a href="/">TipidPC Pricelists</a></h1>
+      {% if not username %}
+      <p>
+        The <a href="http://tipidpc.com" target="_blank">TPC website</a> isn't exactly
+        printer-friendly. This simple app solves that. It can generate a pdf pricelist
+        from your posted user items in TPC. You also get a link which you can share to
+        your customers.
+      </p>
+      <p>
+        Example:
+        <a href="http://tpcpricelists.appspot.com/PCHub">
+          http://tpcpricelists.appspot.com/PCHub
+        </a>
+      </p>
+      {% endif %}
+      <form action="/" method="post">
+        <input type="hidden" name="nonce" value="{{ nonce }}">
+        {% if not username %}
+        <label for="username">TPC Username</label>
+        <input type="text" name="username" id="username">
+        <input type="submit" value="Download Pricelist">
+        {% else %}
+        <input type="hidden" name="username" value="{{ username }}">
+        <input type="submit" value="Download {{ username }}'s Pricelist">
+        {% endif %}
+      </form>
+      <div id="footer">
+        Created by <a href="https://twitter.com/themarksteve">@themarksteve</a> -
+        Share on
+        <a
+          href="javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Ftpcpricelists.appspot.com&t=TPC+Pricelists',
+          '_blank', 'width=640,height=320')">
+          Facebook
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

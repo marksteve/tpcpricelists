@@ -33,39 +33,84 @@
   </head>
   <body>
     <div id="wrapper">
-      <h1><a href="/">TipidPC Pricelists</a></h1>
-      {% if not username %}
-      <p>
-        The <a href="http://tipidpc.com" target="_blank">TPC website</a> isn't exactly
-        printer-friendly. This simple app solves that. It can generate a pdf pricelist
-        from your posted user items in TPC. You also get a link which you can share to
-        your customers.
-      </p>
-      <p>
-        Example:
-        <a href="http://tpcpricelists.appspot.com/PCHub">
-          http://tpcpricelists.appspot.com/PCHub
-        </a>
-      </p>
-      {% endif %}
-      <form action="/" method="post">
-        <input type="hidden" name="nonce" value="{{ nonce }}">
+      <div id="content">
+        <h1><a href="/">TipidPC Pricelists</a></h1>
         {% if not username %}
-        <label for="username">TPC Username</label>
-        <input type="text" name="username" id="username">
-        <input type="submit" value="Download Pricelist">
-        {% else %}
-        <input type="hidden" name="username" value="{{ username }}">
-        <input type="submit" value="Download {{ username }}'s Pricelist">
+        <p>
+          The <a href="http://tipidpc.com" target="_blank">TPC website</a> isn't exactly
+          printer-friendly. This simple app solves that. It can generate a pdf pricelist
+          from your posted user items in TPC. You also get a link which you can share to
+          your customers.
+        </p>
+        <p>
+          Example:
+          <a href="http://tpcpricelists.appspot.com/PCHub">
+            http://tpcpricelists.appspot.com/PCHub
+          </a>
+        </p>
         {% endif %}
-      </form>
-      <div id="footer">
-        Created by <a href="https://twitter.com/themarksteve">@themarksteve</a> -
-        Share on
-        <a
-          href="javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Ftpcpricelists.appspot.com&t=TPC+Pricelists',
-          '_blank', 'width=640,height=320')">
-          Facebook
+        <form action="/" method="post">
+          <input type="hidden" name="nonce" value="{{ nonce }}">
+          {% if not username %}
+          <label for="username">TPC Username</label>
+          <input type="text" name="username" id="username">
+          <input type="submit" value="Download Pricelist">
+          {% else %}
+          <input type="hidden" name="username" value="{{ username }}">
+          <input type="submit" value="Download {{ username }}'s Pricelist">
+          {% endif %}
+        </form>
+        <div id="footer">
+          Created by <a href="https://twitter.com/themarksteve">@themarksteve</a> -
+          Share on
+          <a
+            href="javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Ftpcpricelists.appspot.com&t=TPC+Pricelists',
+            '_blank', 'width=640,height=320')">
+            Facebook
+          </a>
+        </div>
+      </div>
+      <div id="ads">
+        <h2>Recommendations</h2>
+        <a href="http://ph.churpchurp.com/marksteve/share/Shakeys-original-thin-crust"
+          target="_blank">
+          <img src="http://ph.churpchurp.com/buzz/img/391/471.jpg">
+          <h3>The Original Thin'</h3>
+          <p>
+            Hello, Pizzanatics!
+          </p>
+          <p>
+            Do you know that the Greeks invented pizza? And that the original thin crust is actually pita bread baked over hot stone?
+          </p>
+          <p>
+            If you want to taste more of the sauce, cheese, and toppings, go with thin crust pizzas. And when it comes to thin crust pizzas, SHAKEY'S is the original!
+          </p>
+        </a>
+        <a href="http://ph.churpchurp.com/marksteve/share/MUJIShampooandConditioner"
+          target="_blank">
+          <img src="http://ph.churpchurp.com/buzz/img/372/452.jpg">
+          <h3>MUJI Beauty</h3>
+          <p>
+            Hey all you MUJI addicts out there! Save 20% on a pair of 400ml bottles of MUJI Shampoo and Conditioner. We’ve also got five variants to choose from: 1) Five Fruits, 2) Seven Herbs, 3) Seaweed, 4) Mild Natural, and 5) Mild, for any hair type and hair situation.
+          </p>
+          <p>
+            Awesome eh? Share this news to your girlfriends and go to your favorite MUJI store to grab these items now!
+          </p>
+        </a>
+        <a href="http://ph.churpchurp.com/marksteve/share/churpchurp-invite"
+          target="_blank">
+          <img src="http://ph.churpchurp.com/buzz/img/231/322.jpg">
+          <h3>Invite your friends and get rewarded for sharing new promos and trends you love the
+            most!</h3>
+          <p>
+            Ready to burst out all the latest awesome news to your friends? Get rewarded by doing so!
+          </p>
+          <p>
+            Bring your friends to sign up today and get rewarded Php15.00 per friend invited.
+          </p>
+          <p>
+            The more, the merrier!
+          </p>
         </a>
       </div>
     </div>

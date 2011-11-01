@@ -49,12 +49,48 @@ table {
 
 /* Styles */
 
-#wrapper {
+#content {
   background-color: white;
+  float: left;
   width: 360px;
-  margin: 0 auto;
-  padding: 21px;
+  padding: 20px;
   border: 1px #999 dashed;
+}
+
+#ads {
+  padding: 0 20px;
+  float: left;
+}
+
+#ads h2 {
+  color: #999;
+  margin-bottom: 7px;
+}
+
+#ads a {
+  background-color: white;
+  border: 1px #999 dashed;
+  color: black;
+  display: block;
+  float: left;
+  font-size: 80%;
+  line-height: 1;
+  margin-right: 20px;
+  padding: 14px;
+  width: 150px;
+}
+
+#ads h3 {
+  font-weight: bold;
+}
+
+#ads h3, #ads p {
+  margin-bottom: 7px;
+}
+
+#ads img {
+  margin-bottom: 14px;
+  width: 150px;
 }
 
 body {

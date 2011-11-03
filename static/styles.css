@@ -57,17 +57,17 @@ table {
   border: 1px #999 dashed;
 }
 
-#ads {
+#suggestions {
   padding: 0 20px;
   float: left;
 }
 
-#ads h2 {
+#suggestions h2 {
   color: #999;
   margin-bottom: 7px;
 }
 
-#ads a {
+#suggestions a {
   background-color: white;
   border: 1px #999 dashed;
   color: black;
@@ -80,15 +80,15 @@ table {
   width: 150px;
 }
 
-#ads h3 {
+#suggestions h3 {
   font-weight: bold;
 }
 
-#ads h3, #ads p {
+#suggestions h3, #suggestions p {
   margin-bottom: 7px;
 }
 
-#ads img {
+#suggestions img {
   margin-bottom: 14px;
   width: 150px;
 }

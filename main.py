@@ -113,7 +113,7 @@ class MainHandler(webapp.RequestHandler):
             item_list.append([item.text, price.string])
         except (AttributeError, ValueError):
           self.response.set_status(400)
-          self.response.out.write('Invalid username or no user items.')
+          self.response.out.write('Invalid username, incomplete info (missing location/contact no) or no user items.')
           return
 
         # Prepare pdf values

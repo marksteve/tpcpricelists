@@ -6,6 +6,7 @@ sys.path.extend(['reportlab.zip', 'requests.zip'])
 from BeautifulSoup import BeautifulSoup
 from StringIO import StringIO
 from datetime import date
+from google.appengine.api import memcache
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
@@ -32,7 +33,6 @@ import time
 ITEM_PER_PAGE = 72
 TAB = '&nbsp;&nbsp;&nbsp;&nbsp;'
 PRICELIST_TTL = 24 * 60 * 60 # 1 day
-NONCE_CACHE = {}
 
 
 def current_time():
@@ -57,14 +57,9 @@ class MainHandler(webapp.RequestHandler):
     # Get usernames
     usernames = str(json.dumps([p.username for p in Pricelist.all()]))
 
-    # Clean up cache
-    for key in NONCE_CACHE.keys():
-      if key + 30 * 60 < current_time():
-        del NONCE_CACHE[key]
-
     # Generate nonce
     nonce = base64.urlsafe_b64encode(os.urandom(8))
-    NONCE_CACHE[current_time()] = nonce
+    memcache.set(nonce, True, time=15 * 60) # Expire in 15 minutes
 
     # Render page
     template_file = os.path.join(os.path.dirname(__file__), 'index.html')
@@ -80,7 +75,8 @@ class MainHandler(webapp.RequestHandler):
       username = self.request.get('username')
       today = str(date.today())
 
-      if nonce not in NONCE_CACHE.values():
+      # Check nonce
+      if not memcache.get(nonce):
         self.redirect('/' + username)
         return
 

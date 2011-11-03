@@ -6,6 +6,7 @@ sys.path.extend(['reportlab.zip', 'requests.zip'])
 from BeautifulSoup import BeautifulSoup
 from StringIO import StringIO
 from datetime import date
+from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp import util
@@ -30,24 +31,31 @@ import time
 
 ITEM_PER_PAGE = 72
 TAB = '&nbsp;&nbsp;&nbsp;&nbsp;'
+PRICELIST_TTL = 24 * 60 * 60 # 1 day
 NONCE_CACHE = {}
-PDF_CACHE = {}
 
 
 def current_time():
   return int(time.time())
 
 
+class Pricelist(db.Model):
+  username = db.StringProperty()
+  pdf = db.BlobProperty()
+  last_updated = db.IntegerProperty()
+
+  @property
+  def expired(self):
+    return self.last_updated + PRICELIST_TTL < current_time()
+
+
 class MainHandler(webapp.RequestHandler):
 
   def get(self, username):
     username = cgi.escape(username)
-    today = str(date.today())
 
-    usernames = []
-    pdfs = PDF_CACHE.get(today)
-    if pdfs:
-      usernames = str(json.dumps(pdfs.keys()))
+    # Get usernames
+    usernames = str(json.dumps([p.username for p in Pricelist.all()]))
 
     # Clean up cache
     for key in NONCE_CACHE.keys():
@@ -70,29 +78,20 @@ class MainHandler(webapp.RequestHandler):
     try:
       nonce = self.request.get('nonce')
       username = self.request.get('username')
+      today = str(date.today())
 
       if nonce not in NONCE_CACHE.values():
         self.redirect('/' + username)
         return
 
-      today = str(date.today())
+      pricelist = Pricelist.all().filter('username =', username).get()
+      if not pricelist:
+        pricelist = Pricelist(username=username, last_updated=0)
+        pricelist.put()
 
-      # Clean up cache
-      for key in PDF_CACHE.keys():
-        if key != today:
-          del PDF_CACHE[key]
+      if pricelist.expired or not pricelist.pdf:
 
-      base64.urlsafe_b64encode(os.urandom(30))
-
-      # Check if cached copy is available
-      pdf = None
-      pdfs = PDF_CACHE.get(today)
-      if pdfs:
-        pdf = pdfs.get(username)
-
-      if not pdf:
-
-        pdf = StringIO()
+        blob = StringIO()
 
         # Parse html
         try:
@@ -134,7 +133,7 @@ class MainHandler(webapp.RequestHandler):
                                   ])
 
         # Render pdf
-        c = canvas.Canvas(pdf, pagesize=LETTER)
+        c = canvas.Canvas(blob, pagesize=LETTER)
         c.setAuthor(username)
         h = Table([[username + ' Pricelist (' + today + ')',
                     'Location: ' + location + '\n' +
@@ -155,18 +154,18 @@ class MainHandler(webapp.RequestHandler):
           c.showPage()
         c.save()
 
-        # Store in cache
-        if not pdfs:
-          PDF_CACHE[today] = {}
-        PDF_CACHE[today][username] = pdf
+        pricelist.pdf = blob.getvalue()
+        pricelist.last_updated = current_time()
+        pricelist.put()
 
       # Set Headers
       self.response.headers['Content-Type'] = 'application/pdf'
       self.response.headers['Content-Disposition'] = (
         'attachment; filename=' + username + '_pricelist_' + today.replace('-', '_') + '.pdf'
       )
+
       # Write pdf to response
-      self.response.out.write(pdf.getvalue())
+      self.response.out.write(pricelist.pdf)
 
     except DeadlineExceededError:
       self.response.set_status(500)

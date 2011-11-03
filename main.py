@@ -60,7 +60,10 @@ class MainHandler(webapp.RequestHandler):
     memcache.set(nonce, True, time=15 * 60) # Expire in 15 minutes
 
     # Get usernames
-    usernames = memcache.get('usernames') or '["PCHub"]'
+    usernames = memcache.get('usernames')
+    if not usernames:
+      usernames = str(json.dumps([p.username for p in Pricelist.all()]))
+      memcache.set('usernames', usernames)
 
     # Example username
     example_username = choice(json.loads(usernames))
@@ -89,7 +92,6 @@ class MainHandler(webapp.RequestHandler):
       if not pricelist:
         pricelist = Pricelist(username=username, last_updated=0)
         pricelist.put()
-        memcache.set('usernames', str(json.dumps([p.username for p in Pricelist.all()])))
 
       if pricelist.expired or not pricelist.pdf:
 

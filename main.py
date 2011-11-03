@@ -55,7 +55,7 @@ class MainHandler(webapp.RequestHandler):
     username = cgi.escape(username)
 
     # Get usernames
-    usernames = str(json.dumps([p.username for p in Pricelist.all()]))
+    usernames = memcache.get('usernames') or '[]'
 
     # Generate nonce
     nonce = base64.urlsafe_b64encode(os.urandom(8))
@@ -84,6 +84,7 @@ class MainHandler(webapp.RequestHandler):
       if not pricelist:
         pricelist = Pricelist(username=username, last_updated=0)
         pricelist.put()
+        memcache.set('usernames', str(json.dumps([p.username for p in Pricelist.all()])))
 
       if pricelist.expired or not pricelist.pdf:
 

@@ -12,6 +12,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp import util
 from google.appengine.runtime import DeadlineExceededError
+from random import choice
 from reportlab.lib.colors import HexColor
 from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER, TA_JUSTIFY
 from reportlab.lib.pagesizes import LETTER
@@ -54,19 +55,23 @@ class MainHandler(webapp.RequestHandler):
   def get(self, username):
     username = cgi.escape(username)
 
-    # Get usernames
-    usernames = memcache.get('usernames') or '[]'
-
     # Generate nonce
     nonce = base64.urlsafe_b64encode(os.urandom(8))
     memcache.set(nonce, True, time=15 * 60) # Expire in 15 minutes
 
+    # Get usernames
+    usernames = memcache.get('usernames') or '["PCHub"]'
+
+    # Example username
+    example_username = choice(json.loads(usernames))
+
     # Render page
     template_file = os.path.join(os.path.dirname(__file__), 'index.html')
     self.response.out.write(template.render(template_file, {
-      'usernames': usernames,
       'username': username,
       'nonce': nonce,
+      'usernames': usernames,
+      'example_username': example_username,
     }))
 
   def post(self, *unused):

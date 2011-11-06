@@ -58,6 +58,7 @@ table {
 }
 
 #suggestions {
+  width: 730px;
   padding: 0 20px;
   float: left;
 }
@@ -67,7 +68,7 @@ table {
   margin-bottom: 7px;
 }
 
-#suggestions a {
+#suggestions > a {
   background-color: white;
   border: 1px #999 dashed;
   color: black;
@@ -77,7 +78,7 @@ table {
   line-height: 1;
   margin-right: 20px;
   padding: 14px;
-  width: 150px;
+  width: 130px;
 }
 
 #suggestions h3 {
@@ -90,7 +91,7 @@ table {
 
 #suggestions img {
   margin-bottom: 14px;
-  width: 150px;
+  width: 130px;
 }
 
 body {
@@ -196,6 +197,7 @@ input[type="submit"]:active {
 }
 
 #footer {
+  line-height: 1.2;
   font-size: 0.8em;
   color: #999;
 }

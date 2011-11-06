@@ -62,10 +62,11 @@ class MainHandler(webapp.RequestHandler):
     # Get usernames
     usernames = memcache.get('usernames')
     if not usernames:
-      usernames = str(json.dumps([p.username for p in Pricelist.all()]))
+      usernames = str(json.dumps([p.username for p in Pricelist.all().filter('last_updated !=', 0)]))
       if usernames == '[]':
         usernames = '["PCHub"]'
-      memcache.set('usernames', usernames)
+      else:
+        memcache.set('usernames', usernames)
 
     # Example username
     example_username = choice(json.loads(usernames))
